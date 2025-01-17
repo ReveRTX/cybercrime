@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybercrimealas - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #f4f4f4;
+            overflow: hidden;
+        }
+
+        video#bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f44336;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #f4f4f4;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #f44336;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #f44336;
+            border: none;
+            border-radius: 5px;
+            color: #f4f4f4;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .footer a {
+            color: #f44336;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        .modal-content {
+            text-align: center;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            color: #f4f4f4;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .thumb-animation {
+            position: relative;
+            width: 120px;
+            height: 180px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            border: 2px solid #f44336;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .thumb-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c4.418 0 8 3.582 8 8v4c0 4.418-3.582 8-8 8s-8-3.582-8-8V10c0-4.418 3.582-8 8-8z"/><path d="M12 14c1.657 0 3-1.343 3-3V9c0-1.657-1.343-3-3-3s-3 1.343-3 3v2c0 1.657 1.343 3 3 3z"/></svg>') no-repeat center;
+            background-size: contain;
+            opacity: 0.2;
+        }
+
+        .thumb-scan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.7);
+            animation: scan-line 2s infinite;
+        }
+
+        @keyframes scan-line {
+            0% {
+                top: 0;
+            }
+            50% {
+                top: calc(100% - 3px);
+            }
+            100% {
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <video id="bg-video" autoplay muted loop>
+        <source src="cybercrime.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+        <h1>Cybercrimealas</h1>
+        <form id="login-form" action="#" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="button" class="login-btn" onclick="showModal()">Login</button>
+        </form>
+        <div class="footer">
+            <p>Forgot your password? <a href="#">Click here</a></p>
+        </div>
+    </div>
+
+    <div id="biometric-modal" class="modal">
+        <div class="modal-content">
+            <h2>Verify Thumb</h2>
+            <div class="thumb-animation">
+                <div class="thumb-scan"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showModal() {
+            document.getElementById('biometric-modal').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
